@@ -21,8 +21,10 @@ client.on("messageCreate", async (msg) => {
     const { content } = msg;
 
     // reply to msg
-    if (content.startsWith("++")) {
-      const command = content.split("++")[1].split(" ")[0];
+    if (content.startsWith("++") || content.startsWith("--")) {
+      const command =
+        content.split("++")[1]?.split(" ")[0] ||
+        content.split("--")[1]?.split(" ")[0];
       await commandHandler(msg, command);
     }
   } catch (e) {

@@ -6,6 +6,10 @@ const statSchema = new mongoose.Schema({
   wowUrSoFunny: { type: Number, default: 0 },
   downBad: { type: Number, default: 0 },
   noCap: { type: Number, default: 0 },
+  sad: { type: Number, default: 0 },
+  bruh: { type: Number, default: 0 },
+  socialCredits: { type: Number, default: 0 },
+  hot: { type: Number, default: 0 },
 });
 
 const userSchema = new mongoose.Schema({
