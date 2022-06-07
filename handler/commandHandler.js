@@ -2,6 +2,7 @@ const validIncrementCommands = require("./validIncrementCommands");
 const incrementStats = require("../commands/incrementStats");
 const createEmbeddedMsg = require("../utils/processUser");
 const User = require("../models/user");
+const CommandCounter = require("../models/commandCounter");
 
 const commandHandler = async (msg, command) => {
   // check if [stat] command is present
@@ -38,6 +39,36 @@ const commandHandler = async (msg, command) => {
     const symbol = msg.content[0];
     const { id } = msg.mentions.users.first();
     if (validIncrementCommands[command] && id) {
+      let author = await CommandCounter.findOne({ userId: msg.author.id });
+      if (!author) {
+        author = await CommandCounter.create({
+          userId: msg.author.id,
+          date: new Date(),
+        });
+      }
+      const msBetweenDates = Math.abs(
+        new Date().getTime() - author.date.getTime()
+      );
+      // ️ convert ms to hours                  min  sec   ms
+      const hoursBetweenDates = msBetweenDates / (60 * 60 * 1000);
+      if (hoursBetweenDates > 24) {
+        author = await CommandCounter.findOneAndUpdate(
+          { userId: msg.author.id },
+          { $set: { count: 10 } }
+        );
+      }
+      if (author.count === 0) {
+        // count the no of remaining commands
+        msg.reply(
+          "Of all the things, you could have done with your time, you chose to abuse a bot.\nTake a moment and think about it. Do better.\n" +
+            "Your limit will reset after 24 hours"
+        );
+        return;
+      }
+      await CommandCounter.findOneAndUpdate(
+        { userId: msg.author.id },
+        { $inc: { count: -1 } }
+      );
       await incrementStats(msg, id, command, symbol);
     }
   }

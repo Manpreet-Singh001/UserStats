@@ -7,6 +7,7 @@ validCommands = {
   sad: "sad",
   socialCredits: "socialCredits",
   bruh: "bruh",
+  downBad: "downBad",
 };
 Object.freeze(validCommands);
 module.exports = validCommands;
