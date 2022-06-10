@@ -39,6 +39,7 @@ const commandHandler = async (msg, command) => {
     const symbol = msg.content[0];
     const { id } = msg.mentions.users.first();
     if (validIncrementCommands[command] && id) {
+      console.log(msg.author.id);
       let author = await CommandCounter.findOne({ userId: msg.author.id });
       if (!author) {
         author = await CommandCounter.create({
@@ -51,17 +52,18 @@ const commandHandler = async (msg, command) => {
       );
       // ️ convert ms to hours                  min  sec   ms
       const hoursBetweenDates = msBetweenDates / (60 * 60 * 1000);
-      if (hoursBetweenDates > 24) {
+      if (hoursBetweenDates >= 1) {
         author = await CommandCounter.findOneAndUpdate(
           { userId: msg.author.id },
-          { $set: { count: 10 } }
+          { $set: { count: 5, date: new Date() } },
+          { new: true }
         );
       }
       if (author.count === 0) {
         // count the no of remaining commands
         msg.reply(
           "Of all the things, you could have done with your time, you chose to abuse a bot.\nTake a moment and think about it. Do better.\n" +
-            "Your limit will reset after 24 hours"
+            "Your limit will reset after 1 hour"
         );
         return;
       }

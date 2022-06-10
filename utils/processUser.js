@@ -15,10 +15,10 @@ const createKey = (key) => {
       key = "<:Beta:888125222820130836> " + key;
       break;
     case "noCap":
-      key = ":no_entry_sign::billed_cap: " + key;
+      key = "<:paul:962533391465582592> " + key;
       break;
     case "hot":
-      key = ":hot_face: " + key;
+      key = "<:evan:957472095846158376> " + key;
       break;
     case "sad":
       key = "<:sad_frog:955711721459310592> " + key;
@@ -28,6 +28,15 @@ const createKey = (key) => {
       break;
     case "socialCredits":
       key = "<:thicc_jack_ma:902440456674218044> " + key;
+      break;
+    case "getALife":
+      key = "<:absolute_pain:921256875431985183> " + key;
+      break;
+    case "bitchless":
+      key = "<:omaewamoushindeiru:937917826952478770> " + key;
+      break;
+    case "bigBrain":
+      key = "<:cat_m:906317107103424613> " + key;
       break;
   }
   return key;

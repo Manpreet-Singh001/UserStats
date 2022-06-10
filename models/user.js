@@ -10,6 +10,9 @@ const statSchema = new mongoose.Schema({
   bruh: { type: Number, default: 0 },
   socialCredits: { type: Number, default: 0 },
   hot: { type: Number, default: 0 },
+  bitchless: { type: Number, default: 0 },
+  getALife: { type: Number, default: 0 },
+  bigBrain: { type: Number, default: 0 },
 });
 
 const userSchema = new mongoose.Schema({

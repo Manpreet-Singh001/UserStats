@@ -10,6 +10,10 @@ const updateStats = async (msg, userId, statToIncrement, symbol) => {
     console.log("pls enter a valid stat");
     return;
   }
+  if (msg.author.id === userId) {
+    msg.reply("You silly, you cannot update your own stats.");
+    return;
+  }
 
   // find the user if it doesn't exist create one
   let currentUser = await User.findOne({ userId });
