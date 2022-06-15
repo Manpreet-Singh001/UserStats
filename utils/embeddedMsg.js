@@ -1,3 +1,4 @@
+//
 const { MessageEmbed } = require("discord.js");
 
 // inside a command, event listener, etc.

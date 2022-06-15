@@ -1,4 +1,4 @@
-// modules
+// modules .
 require("dotenv").config();
 const mongoose = require("mongoose");
 const { Client, Intents, Message } = require("discord.js");
@@ -7,6 +7,7 @@ const { Client, Intents, Message } = require("discord.js");
 const commandHandler = require("./handler/commandHandler");
 const incrementStats = require("./commands/incrementStats");
 const User = require("./models/user");
+const CommandCounter = require("./models/commandCounter");
 
 // Create a new client instance
 const client = new Client({
@@ -52,7 +53,38 @@ client.on("messageReactionAdd", async (reaction, user) => {
       return;
     }
   }
-  console.log({ ...reaction._emoji }.name);
+  if (user.id === reaction.message.author.id) {
+    return;
+  }
+  let author = await CommandCounter.findOne({ userId: user.id });
+  if (!author) {
+    author = await CommandCounter.create({
+      userId: user.id,
+      date: new Date(),
+    });
+  }
+  const msBetweenDates = Math.abs(new Date().getTime() - author.date.getTime());
+  // ️ convert ms to hours                  min  sec   ms
+  const hoursBetweenDates = msBetweenDates / (60 * 60 * 1000);
+  console.log(hoursBetweenDates);
+
+  if (hoursBetweenDates >= 1) {
+    author = await CommandCounter.findOneAndUpdate(
+      { userId: user.id },
+      { $set: { count: 5, date: new Date() } },
+      { new: true }
+    );
+  }
+  if (author.count === 0) {
+    // count the no of remaining commands
+    return;
+  }
+  await CommandCounter.findOneAndUpdate(
+    { userId: user.id },
+    { $inc: { count: -1 } }
+  );
+  console.log(author.count);
+  console.log({ ...reaction._emoji }.name.charCodeAt(0));
 
   // Now the message has been cached and is fully available
   console.log(
